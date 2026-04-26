@@ -1,4 +1,5 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, KeyboardEvent } from "react";
+import TextField from "@mui/material/TextField";
 
 type Props = {
   title: string;
@@ -8,23 +9,55 @@ type Props = {
 export function EditableSpan({ title, onChangeEditableSpan }: Props) {
   const [isEdit, setIsEdit] = useState(false);
   const [currentTitle, setCurrentTitle] = useState(title);
-  function handleOnBlur() {
+
+  const activateEditMode = () => {
+    setIsEdit(true);
+    setCurrentTitle(title);
+  };
+
+  const activateViewMode = () => {
     setIsEdit(false);
-  }
-  function handleOnChange(e: ChangeEvent<HTMLInputElement>) {
-    let curTitle = e.currentTarget.value;
-    setCurrentTitle(curTitle);
-    onChangeEditableSpan(curTitle);
-  }
+    if (currentTitle.trim()) {
+      onChangeEditableSpan(currentTitle);
+    } else {
+      setCurrentTitle(title);
+    }
+  };
+
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setCurrentTitle(e.currentTarget.value);
+  };
+
+  const handleOnKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      activateViewMode();
+    }
+  };
+
   return isEdit ? (
-    <input
+    <TextField
+      variant="standard"
+      size="small"
       autoFocus
-      type="text"
-      onBlur={handleOnBlur}
-      onChange={(e) => handleOnChange(e)}
+      onBlur={activateViewMode}
+      onChange={handleOnChange}
+      onKeyDown={handleOnKeyDown}
       value={currentTitle}
+      sx={{
+        "& .MuiInput-root": { fontSize: "inherit", fontWeight: "inherit" },
+      }}
     />
   ) : (
-    <span onDoubleClick={() => setIsEdit(true)}>{title}</span>
+    <span
+      onDoubleClick={activateEditMode}
+      style={{
+        cursor: "pointer",
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+      }}
+    >
+      {title}
+    </span>
   );
 }

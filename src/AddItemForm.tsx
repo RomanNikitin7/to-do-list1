@@ -1,5 +1,7 @@
 import { ChangeEvent, KeyboardEvent, useState } from "react";
-import { Button } from "./Button";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 
 type PropsType = {
   addItem: (title: string) => void;
@@ -26,16 +28,34 @@ export function AddItemForm({ addItem }: PropsType) {
       setError("Title is required");
     }
   };
+
+  const buttonStyle = {
+    minWidth: "40px",
+    minHeight: "40px",
+    maxWidth: "40px",
+    maxHeight: "40px",
+  };
   return (
-    <div>
-      <input
+    <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}>
+      <TextField
+        error={!!error}
+        size="small"
+        fullWidth
         className={error ? "error" : ""}
         value={itemTitle}
         onChange={changeItemTitleHandler}
         onKeyDown={createItemOnEnterHandler}
+        id="outlined-basic"
+        label={error ? error : "Type something"}
+        variant="outlined"
       />
-      <Button title={"+"} onClick={createItemHandler} />
-      {error && <div className={"error-message"}>{error}</div>}
-    </div>
+      <Button
+        variant="contained"
+        onClick={createItemHandler}
+        style={buttonStyle}
+      >
+        +
+      </Button>
+    </Box>
   );
 }
