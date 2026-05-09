@@ -18,11 +18,18 @@
     "react-dom": "19.0.0",
     "uuid": "11.0.3"
   },
+  "compilerOptions": {
+    "types": [
+      "vitest/globals",
+      "node"
+    ]
+  },
   "devDependencies": {
     "@types/react": "19.0.2",
     "@types/react-dom": "19.0.2",
     "@vitejs/plugin-react-swc": "3.7.2",
     "globals": "15.14.0",
+    "jsdom": "^29.1.0",
     "typescript": "5.7.2",
     "vite": "6.0.6",
     "vitest": "2.1.8"
