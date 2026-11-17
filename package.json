@@ -14,15 +14,10 @@
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^9.0.0",
     "@mui/material": "^9.0.0",
+    "@reduxjs/toolkit": "^2.12.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "uuid": "11.0.3"
-  },
-  "compilerOptions": {
-    "types": [
-      "vitest/globals",
-      "node"
-    ]
+    "react-redux": "^9.3.0"
   },
   "devDependencies": {
     "@types/react": "19.0.2",
@@ -32,6 +27,6 @@
     "jsdom": "^29.1.0",
     "typescript": "5.7.2",
     "vite": "6.0.6",
-    "vitest": "2.1.8"
+    "vitest": "3.2.7"
   }
 }

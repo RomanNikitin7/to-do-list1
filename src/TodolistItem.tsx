@@ -2,14 +2,19 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import { type ChangeEvent } from "react";
 import { AddItemForm } from "./AddItemForm";
-import type { FilterValues, Task, ToDoListType } from "./App";
+import type { FilterValues, Task, ToDoListType } from "./app/App";
 import { EditableSpan } from "./EditableSpan";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import { Box, Typography } from "@mui/material";
-import { filterButtonsContainerSx, getListItemSx } from "./Todolist.styles";
+import {
+  filterButtonsContainerSx,
+  getFilterButtonSx,
+  getListItemSx,
+  todolistTitleSx,
+} from "./Todolist.styles";
 
 type Props = {
   id: string;
@@ -69,19 +74,11 @@ export const TodolistItem = (props: Props) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          mb: 1,
+          gap: 1,
+          mb: 1.5,
         }}
       >
-        <Typography
-          component="h3"
-          variant="h6"
-          sx={{
-            minWidth: "0",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-          }}
-        >
+        <Typography component="h3" variant="h6" sx={todolistTitleSx}>
           <EditableSpan
             title={title}
             onChangeEditableSpan={(newTitle) =>
@@ -90,8 +87,10 @@ export const TodolistItem = (props: Props) => {
           />
         </Typography>
         <IconButton
+          size="small"
           onClick={() => deleteTodoList(id)}
           aria-label="delete todo list"
+          sx={{ color: "text.secondary" }}
         >
           <DeleteIcon />
         </IconButton>
@@ -153,7 +152,13 @@ export const TodolistItem = (props: Props) => {
                     }
                   />
                 </Box>
-                <IconButton onClick={deleteTaskHandler} aria-label="delete">
+                <IconButton
+                  className="task-delete"
+                  size="small"
+                  onClick={deleteTaskHandler}
+                  aria-label="delete"
+                  sx={{ color: "text.secondary" }}
+                >
                   <DeleteIcon />
                 </IconButton>
               </ListItem>
@@ -163,22 +168,25 @@ export const TodolistItem = (props: Props) => {
       )}
       <Box sx={filterButtonsContainerSx}>
         <Button
-          variant={filter === "all" ? "outlined" : "contained"}
+          size="small"
+          aria-pressed={filter === "all"}
+          sx={getFilterButtonSx(filter === "all")}
           onClick={() => changeFilter("all", id)}
-          color="success"
         >
           All
         </Button>
         <Button
-          variant={filter === "active" ? "outlined" : "contained"}
-          color="error"
+          size="small"
+          aria-pressed={filter === "active"}
+          sx={getFilterButtonSx(filter === "active")}
           onClick={() => changeFilter("active", id)}
         >
           Active
         </Button>
         <Button
-          variant={filter === "completed" ? "outlined" : "contained"}
-          color="secondary"
+          size="small"
+          aria-pressed={filter === "completed"}
+          sx={getFilterButtonSx(filter === "completed")}
           onClick={() => changeFilter("completed", id)}
         >
           Completed

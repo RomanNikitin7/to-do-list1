@@ -5,21 +5,25 @@ type MenuButtonProps = {
   backgroundColor?: string;
 };
 
-export const MenuButton = styled(Button)<MenuButtonProps>(
-  ({ backgroundColor, theme }) => ({
-    minWidth: "110px",
-    fontWeight: "bold",
-    boxShadow: `0 0 0 2px ${theme.palette.primary.dark}, 4px 4px 0 0 ${theme.palette.primary.dark}`,
-    borderRadius: "2px",
-    textTransform: "capitalize",
-    margin: "0 10px",
-    padding: "8px 24px",
-    color: theme.palette.primary.contrastText,
-    background: backgroundColor || theme.palette.primary.light,
+export const MenuButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== "backgroundColor",
+})<MenuButtonProps>(({ backgroundColor, theme }) => {
+  // theme.vars — CSS-переменные, они меняются вместе с цветовой схемой
+  const palette = (theme.vars ?? theme).palette;
+  return {
+    minWidth: 0,
+    margin: "0 2px",
+    padding: "6px 14px",
+    borderRadius: "999px",
+    fontWeight: 600,
+    color: backgroundColor
+      ? palette.primary.contrastText
+      : palette.text.primary,
+    background: backgroundColor || "transparent",
 
     "&:hover": {
-      background: "#1976d2",
-      boxShadow: "0 0 0 2px #054B62, 2px 2px 0 0 #054B62",
+      background: backgroundColor || palette.action.hover,
+      filter: backgroundColor ? "brightness(1.08)" : "none",
     },
-  }),
-);
+  };
+});

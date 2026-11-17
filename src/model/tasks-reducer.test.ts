@@ -1,14 +1,13 @@
 import { beforeEach, expect, test } from "vitest";
-import { TasksTypeArr } from "../App";
+import { TasksTypeArr } from "../app/App";
 import {
-  CreateTaskAC,
-  CreateTodoListAC,
-  DeleteTodoListAC,
+  createTaskAC,
   tasksReducer,
-  DeleteTaskAC,
-  ChangeTaskStatusAC,
-  ChangeTaskTitleAC,
+  deleteTaskAC,
+  changeTaskStatusAC,
+  changeTaskTitleAC,
 } from "./tasks-reducer";
+import { createTodoListAC, deleteTodoListAC } from "./todolist-reducer";
 
 let startState: TasksTypeArr = {};
 
@@ -32,7 +31,7 @@ test("task should be created", () => {
   const newTask = "new task";
   const endState = tasksReducer(
     startState,
-    CreateTaskAC(newTask, "TODOLISTID1"),
+    createTaskAC({ title: newTask, toDoListId: "TODOLISTID1" }),
   );
 
   expect(endState["TODOLISTID1"].length).toBe(4);
@@ -41,7 +40,7 @@ test("task should be created", () => {
 });
 
 test("todolist should be created", () => {
-  const endState = tasksReducer(startState, CreateTodoListAC("todolistid3"));
+  const endState = tasksReducer(startState, createTodoListAC("todolistid3"));
 
   const keys = Object.keys(endState);
 
@@ -56,7 +55,10 @@ test("todolist should be created", () => {
 });
 
 test("todolist should be deleted", () => {
-  const endState = tasksReducer(startState, DeleteTodoListAC("TODOLISTID1"));
+  const endState = tasksReducer(
+    startState,
+    deleteTodoListAC({ id: "TODOLISTID1" }),
+  );
 
   const keys = Object.keys(endState);
 
@@ -67,7 +69,7 @@ test("todolist should be deleted", () => {
 test("task should be deleted", () => {
   const endState = tasksReducer(
     startState,
-    DeleteTaskAC("task2", "TODOLISTID1"),
+    deleteTaskAC({ taskId: "task2", toDoListId: "TODOLISTID1" }),
   );
 
   expect(endState["TODOLISTID1"].length).toBe(2);
@@ -79,7 +81,11 @@ test("task status should be changed", () => {
   const newStatus = false;
   const endState = tasksReducer(
     startState,
-    ChangeTaskStatusAC("task1", newStatus, "TODOLISTID1"),
+    changeTaskStatusAC({
+      taskId: "task1",
+      isDone: newStatus,
+      toDoListId: "TODOLISTID1",
+    }),
   );
 
   const task1 = endState["TODOLISTID1"].find((t) => t.id === "task1");
@@ -94,7 +100,11 @@ test("task title should be changed", () => {
 
   const endState = tasksReducer(
     startState,
-    ChangeTaskTitleAC("task1", newTitle, "TODOLISTID1"),
+    changeTaskTitleAC({
+      taskId: "task1",
+      spanTitle: newTitle,
+      toDoListId: "TODOLISTID1",
+    }),
   );
 
   const task1 = endState["TODOLISTID1"].find((t) => t.id === "task1");

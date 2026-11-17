@@ -5,15 +5,20 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { MenuButton } from "./MenuButton";
-import { Container, useTheme } from "@mui/material";
-import Switch from "@mui/material/Switch";
+import { Container } from "@mui/material";
+import { useColorScheme, useTheme } from "@mui/material/styles";
+import DarkModeOutlined from "@mui/icons-material/DarkModeOutlined";
+import LightModeOutlined from "@mui/icons-material/LightModeOutlined";
 
-type Props = {
-  onChange: () => void;
-};
-  
-export function ButtonAppBar({ onChange }: Props) {
+export function ButtonAppBar() {
   const theme = useTheme();
+  const { mode, systemMode, setMode } = useColorScheme();
+  // mode может быть "system" — тогда реальную тему берём из systemMode
+  const isDark = (mode === "system" ? systemMode : mode) === "dark";
+
+  const changeMode = () => {
+    setMode(isDark ? "light" : "dark");
+  };
   return (
     <>
       <AppBar position="fixed">
@@ -34,13 +39,21 @@ export function ButtonAppBar({ onChange }: Props) {
             <Box sx={{ display: "flex", alignItems: "center", ml: "auto" }}>
               <MenuButton
                 color="inherit"
-                backgroundColor={theme.palette.primary.dark}
+                backgroundColor={theme.vars?.palette.primary.main}
               >
                 Login
               </MenuButton>
               <MenuButton color="inherit">Logout</MenuButton>
               <MenuButton color="inherit">FAQ</MenuButton>
-              <Switch onChange={onChange} color="default" />
+              {mode && (
+                <IconButton
+                  onClick={changeMode}
+                  aria-label={isDark ? "Light theme" : "Dark theme"}
+                  sx={{ ml: 1 }}
+                >
+                  {isDark ? <LightModeOutlined /> : <DarkModeOutlined />}
+                </IconButton>
+              )}
             </Box>
           </Toolbar>
         </Container>

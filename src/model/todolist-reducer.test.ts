@@ -1,21 +1,21 @@
-import { v1 } from "uuid";
+import { nanoid } from "@reduxjs/toolkit";
 import { beforeEach, expect, test } from "vitest";
 import {
-  addTodoListAC,
+  createTodoListAC,
   changeTodoListTitleAC,
   deleteTodoListAC,
   todolistReducer,
   changeTodoListFilterAC,
 } from "./todolist-reducer";
-import { ToDoListType } from "../App";
+import { ToDoListType } from "../app/App";
 
 let TODOLISTID1: string;
 let TODOLISTID2: string;
 let initialState: ToDoListType[] = [];
 
 beforeEach(() => {
-  TODOLISTID1 = v1();
-  TODOLISTID2 = v1();
+  TODOLISTID1 = nanoid();
+  TODOLISTID2 = nanoid();
   initialState = [
     {
       id: TODOLISTID1,
@@ -31,7 +31,10 @@ beforeEach(() => {
 });
 
 test("todolist should be deleted", () => {
-  const endState = todolistReducer(initialState, deleteTodoListAC(TODOLISTID1));
+  const endState = todolistReducer(
+    initialState,
+    deleteTodoListAC({ id: TODOLISTID1 }),
+  );
 
   expect(endState.length).toBe(1);
   expect(endState[0].id).toBe(TODOLISTID2);
@@ -40,7 +43,7 @@ test("todolist should be deleted", () => {
 test("todolist should be added", () => {
   const newTitle = "New ToDo List";
 
-  const endState = todolistReducer(initialState, addTodoListAC(newTitle));
+  const endState = todolistReducer(initialState, createTodoListAC(newTitle));
 
   expect(endState.length).toBe(3);
   expect(endState[2].title).toBe(newTitle);
